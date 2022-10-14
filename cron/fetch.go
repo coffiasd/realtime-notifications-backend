@@ -45,19 +45,22 @@ func Fetch() error {
 		FetchJson, err := utils.Request(fmt.Sprintf(config.ParseConfig.App.AlgoRandUrl+"/v2/transactions?round=%d", round), time.Second*5)
 		if err != nil {
 			//damn idk what's happening.
-			time.Sleep(time.Second * 5)
+			middleware.GetLogger().Error(err)
+			time.Sleep(time.Second * 3)
 		}
 
 		if err := json.Unmarshal(FetchJson, &trans); err != nil {
-			time.Sleep(time.Second * 5)
+			middleware.GetLogger().Error(err)
+			time.Sleep(time.Second * 3)
 		}
 		if trans.CurrentRound == round {
-			time.Sleep(time.Second * 2)
+			time.Sleep(time.Second)
 			continue
 		}
 
 		// fmt.Println(trans.Transactions)
 		for _, v := range trans.Transactions {
+			middleware.GetLogger().Info("INFO:", v)
 			checkPushToList(v)
 		}
 
