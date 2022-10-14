@@ -1,0 +1,18 @@
+[APP]
+AppName = "onchain-notification"
+HttpListen = ":8080"
+AlgoRandUrl = "https://algoindexer.testnet.algoexplorerapi.io/"
+
+[Log]
+FileName = "./logs/app.log"
+
+[Redis]
+Addr = "127.0.0.1:6379"
+MaxIdle = 50
+MaxActive = 0
+Password = ""
+DB = 1
+ConnectionTimeout = 3000
+ReadTimeout = 3000
+WriteTimeout = 3000
+IdleTimeout = 3000
