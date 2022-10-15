@@ -26,9 +26,22 @@ func init() {
 	middleware.InitRedis()
 }
 
+func Go(x func()) {
+	go func() {
+		defer func() {
+			if err := recover(); err != nil {
+				fmt.Println(fmt.Sprintf("panic %s\n", err))
+			}
+		}()
+		x()
+	}()
+}
+
 func main() {
 	//listen blockchain data
-	go cron.Fetch()
+	Go(func() {
+		cron.Fetch()
+	})
 
 	httpServer := router.InitRouter()
 	server := &http.Server{Addr: conf.App.HttpListen, Handler: httpServer}
