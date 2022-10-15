@@ -42,6 +42,7 @@ func Fetch() error {
 	}
 
 	for {
+		trans = events.FetchResponse{}
 		FetchJson, err := utils.Request(fmt.Sprintf(config.ParseConfig.App.AlgoRandUrl+"/v2/transactions?round=%d", round), time.Second*5)
 		if err != nil {
 			//damn idk what's happening.
@@ -53,6 +54,7 @@ func Fetch() error {
 			middleware.GetLogger().Error(err)
 			time.Sleep(time.Second * 3)
 		}
+
 		if trans.CurrentRound == round {
 			time.Sleep(time.Second)
 			continue
