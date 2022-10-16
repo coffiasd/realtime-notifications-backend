@@ -44,30 +44,34 @@ func Fetch() error {
 	for {
 		trans = events.FetchResponse{}
 		FetchJson, err := utils.Request(fmt.Sprintf(config.ParseConfig.App.AlgoRandUrl+"/v2/transactions?round=%d", round), time.Second*5)
+
+		middleware.GetLogger().Info(time.Now().Unix(), ",round:", round)
+
 		if err != nil {
 			//damn idk what's happening.
-			middleware.GetLogger().Error(err)
-			time.Sleep(time.Second * 3)
+			middleware.GetLogger().Error(time.Now().Unix(), "Request error:", err)
+			continue
 		}
 
 		if err := json.Unmarshal(FetchJson, &trans); err != nil {
-			middleware.GetLogger().Error(err)
-			time.Sleep(time.Second * 3)
+			middleware.GetLogger().Error(time.Now().Unix(), "json Unmarshal:", err)
+			continue
 		}
 
 		if trans.CurrentRound == round {
-			time.Sleep(time.Second)
+			middleware.GetLogger().Info(time.Now().Unix(), ",sleeping")
+			time.Sleep(time.Second * 2)
 			continue
 		}
 
 		// fmt.Println(trans.Transactions)
 		for _, v := range trans.Transactions {
-			middleware.GetLogger().Info("INFO:", v)
+			// middleware.GetLogger().Info("INFO:", v)
 			checkPushToList(v)
 		}
 
 		round++
-		time.Sleep(time.Second)
+		time.Sleep(time.Second * 2)
 	}
 }
 
