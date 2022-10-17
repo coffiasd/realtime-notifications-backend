@@ -70,7 +70,10 @@ func Fetch() error {
 			checkPushToList(v)
 		}
 
-		round++
+		if round < trans.CurrentRound {
+			round++
+		}
+
 		time.Sleep(time.Second * 2)
 	}
 }
