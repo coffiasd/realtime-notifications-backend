@@ -84,6 +84,7 @@ func checkPushToList(tran events.Transaction) {
 			if v == events.ReceiverTransactionCompleteEvent {
 				//push to notify list
 				// fmt.Println("sender:", v, events.ReceiverTransactionCompleteEvent)
+				middleware.GetLogger().Info(time.Now().Unix(), ",pushing senderData", v)
 				go pushNotify(tran.Sender, getSendContent(tran))
 			}
 		}
@@ -96,6 +97,7 @@ func checkPushToList(tran events.Transaction) {
 			if v == events.SenderTransactionCompleteEvent {
 				//push to notify list
 				// fmt.Println("receive:", v, events.ReceiverTransactionCompleteEvent)
+				middleware.GetLogger().Info(time.Now().Unix(), ",pushing receiverData", v)
 				go pushNotify(tran.Payment.Receiver, getReceiveContent(tran))
 			}
 		}
